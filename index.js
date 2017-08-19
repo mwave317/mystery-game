@@ -16,6 +16,8 @@ app.use(session({
 }))
 
 let storedWord =[];
+let letters ="";
+let storedLetters =[];
 const users = [
 {username: "chris", password: "abc", name: "Chris"},
 {username: "ericka", password: "123",  name: "Ericka"},
@@ -26,14 +28,20 @@ app.get ('/login', function (req, res) {
   console.log("index");
 res.render('index');
 });
+
+//The random genertor needs to be inside the get if it's placed
+//inside the post it picks a new word after each guess of a letter.
 app.get('/mystery', function (req, res) {
   let random = Math.floor(Math.random()* words.length);
   let unveiledWord = words[random];
-  //Loops though the string and adds each letter into an array
+
+  //Loops though the string and adds each letter from the random guessed word  into an array
   for (i=0; i<unveiledWord.length; i++) {
   storedWord.push(unveiledWord.charAt(i));
+  // for (j=0; j <storedWord.length; j++) {
+  //   if (letters)
+  // }
 }
-
 console.log(storedWord);
   console.log(typeof unveiledWord);
   console.log(unveiledWord);
@@ -60,8 +68,11 @@ if (user === null) {
 }
 });
 
-app.post('/guess', function (req, res) {
-  res.render('hangman', {users: req.session.user});
+app.post('/guess', function (req, res, a) {
+letters = req.body.guess;
+storedLetters.push(letters);
+console.log(storedLetters);
+res.render('hangman', {users: req.session.user, storedLetters});
 });
 app.listen(4000, function (){
   console.log("The server is running.");
