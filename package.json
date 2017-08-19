@@ -1,0 +1,25 @@
+{
+  "name": "week-four-project",
+  "version": "1.0.0",
+  "description": "Mystery Game",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mwave317/mystery-game.git"
+  },
+  "author": "Ken Coppola",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mwave317/mystery-game/issues"
+  },
+  "homepage": "https://github.com/mwave317/mystery-game#readme",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "^4.15.4",
+    "express-session": "^1.15.5",
+    "mustache-express": "^1.2.5"
+  }
+}

@@ -2,42 +2,68 @@ const fs = require("fs");
 const express = require('express');
 const mustache = require('mustache-express');
 const bodyparser = require('body-parser');
-const session = require('session');
+const session = require('express-session');
 const words = fs.readFileSync("/usr/share/dict/words", "utf-8").toLowerCase().split("\n");
 const app = express();
-app.engine = ('mustache', mustache());
-app.set = ('view engine', 'mustache');
+app.engine('mustache', mustache());
+app.set('view engine', 'mustache');
 app.use(bodyparser.urlencoded({extended: false}));
-app.use = (express.static(__dirname + '/css/styles.css'));
-app.session(sesion({
+app.use(express.static(__dirname + 'public'));
+app.use(session({
   secret: 'i85bky57iolmhy6thiu87',
   resave: false,
   saveUninitialized: true
-})
-app.get ('/login', function (req, res) {
+}))
 
-});
-
-let users = [{username: "chris", password: "abc"},
-{username: "ericka", password: 123 },
-{username: "chad", password: "jkl"},
+let storedWord =[];
+const users = [
+{username: "chris", password: "abc", name: "Chris"},
+{username: "ericka", password: "123",  name: "Ericka"},
+{username: "chad", password: "jkl",  name: "Chad"},
+{username: "ken", password: "asd", name: "Ken"},
 ];
+app.get ('/login', function (req, res) {
+  console.log("index");
+res.render('index');
+});
+app.get('/mystery', function (req, res) {
+  let random = Math.floor(Math.random()* words.length);
+  let unveiledWord = words[random];
+  //Loops though the string and adds each letter into an array
+  for (i=0; i<unveiledWord.length; i++) {
+  storedWord.push(unveiledWord.charAt(i));
+}
+
+console.log(storedWord);
+  console.log(typeof unveiledWord);
+  console.log(unveiledWord);
+  res.render('hangman', {users: req.session.user});
+});
 
 app.post ('/login', function (req, res){
+  console.log(req.body.username);
   let user = null;
   for (let i=0; i<users.length; i++) {
-  if (res.body.username == users[i].username && res.body.password === users[i].password) {
-   users=users[i];
+  if (req.body.username === users[i].username && req.body.password === users[i].password) {
+   user = users[i];
+   console.log(user);
   }
-});
+} //End of Loop
 if (user !== null) {
-  res.session.user = user;
-  res.redirect('hangman');
+  req.session.user = user;
+  console.log("I should be going to mystery");
+  res.redirect('/mystery');
 }
 if (user === null) {
-  res.redirect('index');
+  console.log("I'm going to the index.");
+  res.render('index');
 }
+});
 
+app.post('/guess', function (req, res) {
+  res.render('hangman', {users: req.session.user});
+});
 app.listen(4000, function (){
   console.log("The server is running.");
+
 });
