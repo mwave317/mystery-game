@@ -14,10 +14,12 @@ app.use(session({
   resave: false,
   saveUninitialized: true
 }))
-
-let storedWord =[];
+let counter = 0;
 let letters ="";
-let storedLetters =[];
+let storedWord =[];
+let storedGuess =[];
+let triesLeft= 6;
+let unveiledWord;
 const users = [
 {username: "chris", password: "abc", name: "Chris"},
 {username: "ericka", password: "123",  name: "Ericka"},
@@ -33,18 +35,16 @@ res.render('index');
 //inside the post it picks a new word after each guess of a letter.
 app.get('/mystery', function (req, res) {
   let random = Math.floor(Math.random()* words.length);
-  let unveiledWord = words[random];
+  unveiledWord = words[random];
 
   //Loops though the string and adds each letter from the random guessed word  into an array
   for (i=0; i<unveiledWord.length; i++) {
   storedWord.push(unveiledWord.charAt(i));
-  // for (j=0; j <storedWord.length; j++) {
-  //   if (letters)
-  // }
-}
+  }
+
 console.log(storedWord);
-  console.log(typeof unveiledWord);
-  console.log(unveiledWord);
+  // console.log(typeof unveiledWord);
+  // console.log(unveiledWord);
   res.render('hangman', {users: req.session.user});
 });
 
@@ -68,11 +68,21 @@ if (user === null) {
 }
 });
 
-app.post('/guess', function (req, res, a) {
+app.post('/guess', function (req, res, s) {
 letters = req.body.guess;
-storedLetters.push(letters);
-console.log(storedLetters);
-res.render('hangman', {users: req.session.user, storedLetters});
+storedGuess.push(letters);
+console.log(storedGuess);
+for (j=0; j <storedWord.length; j++) {
+      if (storedWord[j] === req.body.guess){
+        console.log("That is correct");
+        counter = 0;
+} else if (storedWord[j] !== req.body.guess) {
+  console.log("That is an incorrect guess");
+}
+// console.log(counter);
+}
+console.log(triesLeft);
+res.render('hangman', {users: req.session.user, storedGuess});
 });
 app.listen(4000, function (){
   console.log("The server is running.");
