@@ -1,0 +1,16 @@
+main{
+  display: flex:
+  flex-wrap: wrap;
+  height: 1%;
+}
+
+figure {
+  display: inline-block;
+  flex-direction: row;
+  width: 3%;
+  border-bottom: 2px solid green;
+}
+
+div {
+  visibility: hidden;
+}
