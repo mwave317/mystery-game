@@ -14,28 +14,13 @@ app.use(session({
   resave: false,
   saveUninitialized: true
 }))
-let counter = 0;
-let incorrectGuessCount = 0;
-let letters ="";
-let storedWord =[];
-let storedGuess =[];
-let triesLeft = 6;
-let unveiledWord;
+
 const users = [
 {username: "chris", password: "abc", name: "Chris"},
 {username: "ericka", password: "123",  name: "Ericka"},
 {username: "chad", password: "jkl",  name: "Chad"},
 {username: "ken", password: "asd", name: "Ken"},
 ];
-//
-//
-// function startGame(request) {
-//   request.session.user = user;
-//   request.session.word = storedWord;
-//   request.session.guess = storedGuess;
-//   request.session.triesLeft = triesLeft;
-// }
-
 
 app.get ('/login', function (req, res) {
   console.log("index");
@@ -60,60 +45,62 @@ app.post ('/login', function (req, res){
 //The random genertor needs to be inside the get if it's placed
 //inside the post it picks a new word after each guess of a letter.
 app.get('/mystery', function (req, res) {
+  req.session.counter = 0;
+  req.session.incorrectGuessCount = 0;
+  req.session.letters ="";
+  req.session.storedWord =[];
+  req.session.storedGuess =[];
+  req.session.triesLeft = 6;
+  ;
   let random = Math.floor(Math.random()* words.length);
-  unveiledWord = words[random];
+  req.session.unveiledWord = words[random];
   //Loops though the string and adds each letter from the random guessed word  into an array
-  for (i=0; i<unveiledWord.length; i++) {
-    storedWord.push({
-      letter: unveiledWord.charAt(i),
+  for (i=0; i<req.session.unveiledWord.length; i++) {
+    req.session.storedWord.push({
+      letter: req.session.unveiledWord.charAt(i),
       visible: false
     });
   }
-  console.log(storedWord);
-  // console.log(typeof unveiledWord);
-  // console.log(unveiledWord);
+  console.log(req.session.storedWord);
   res.render('hangman', {
     users: req.session.user,
-    storedWord: storedWord,
-    triesLeft: triesLeft
+    storedWord: req.session.storedWord,
+    triesLeft: req.session.triesLeft
   });
 
 });
 app.post('/guess', function (req, res) {
   // check if a user is in session
   // if no information is in session, start a new game.
-
-  letters = req.body.guess;
-  storedGuess.push(letters);
-
-  console.log(storedGuess);
-  for (j=0; j <storedWord.length; j++) {
-    if (storedWord[j].letter === req.body.guess) {
-      storedWord[j].visible = true;
-      counter +=1;
-      console.log(storedWord);
-    } else if (storedWord[j].letter !== req.body.guess) {
-      incorrectGuessCount ++;
-    } if (triesLeft === 1) {
-      storedWord[j].visible = true;
+    req.session.counter = 0;
+    req.session.incorrectGuessCount = 0;
+  req.session.letters = req.body.guess;
+  req.session.storedGuess.push(req.session.letters);
+  for (j=0; j <req.session.storedWord.length; j++) {
+    if (req.session.storedWord[j].letter === req.body.guess) {
+      req.session.storedWord[j].visible = true;
+      req.session.counter +=1;
+      console.log(req.session.storedWord);
+    } else if (req.session.storedWord[j].letter !== req.body.guess) {
+      req.session.incorrectGuessCount ++;
+    } if (req.session.triesLeft === 1) {
+      req.session.storedWord[j].visible = true;
 
     }
   }
-  if (triesLeft === 0) {
-    req.session.destroy();
+  if (req.session.triesLeft === 0) {
+  res.redirect('/mystery')
   }
-  console.log(storedWord);
-  // console.log(counter);
-  if (incorrectGuessCount >= 1 && counter === 0) {
-    triesLeft --;
+  if (req.session.incorrectGuessCount >= 1 && req.session.counter === 0) {
+    req.session.triesLeft --;
   }
-  counter = 0;
-  incorrectGuessCount = 0;
+  req.session.counter = 0;
+  req.session.incorrectGuessCount = 0;
   res.render('hangman', {
     users: req.session.user,
-    storedGuess: storedGuess,
-    storedWord: storedWord,
-    triesLeft: triesLeft
+    storedGuess: req.session.storedGuess,
+    storedWord: req.session.storedWord,
+    triesLeft: req.session.triesLeft
   });
 });
 app.get('/signup', function(req, res) {

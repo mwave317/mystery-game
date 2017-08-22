@@ -7,12 +7,31 @@ main{
 figure {
   display: inline-block;
   flex-direction: row;
-  width: 2%;
+  font-size: 1.75em;
+  width: 3%;
   margin: .5%;
   padding: 0%;
-  /*border-bottom: 2px solid green;*/
-}
 
+}
+main {
+  text-align: center;
+  background-color: lightblue;
+  border: 2px solid black;
+  margin: 10%;
+}
+#tries {
+  margin-right: 10%;
+  text-align: right;
+}
+.guess {
+  font-size: 2em;
+  text-transform: uppercase;
+}
+#letters {
+  font-size: 1.25em;
+  text-align: left;
+  margin-left: 10%;
+}
 div {
   visibility: hidden;
 }

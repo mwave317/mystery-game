@@ -5,22 +5,19 @@
       <link rel="stylesheet" href="/css/styles.css">
     </head>
   <body>
+
     <section>
           <p> Welcome back, {{#users}}{{name}}{{/users}}</p>
     <h3>The Mystery Word Game</title>
-      <p> Please select your level of difficulty:</p>
-      <p> Easy mode will select words with four and six letters.</p>
-      <p> Regular mode will select words with six to eight letters.</p>
-      <p> Hard mode will contains words greater than eight letters.</p>
     </section>
     <main>
-      <form method="post" action="/guess">
-        <input type = "text" name="guess" id="guess" placeholder="Guess a letter">
-        <input type = "submit" value="submit">
-      <form>
-        <p>Guess the word {{#storedWord}}<figure>{{#visible}}{{letter}}{{/visible}}{{^visible}} _ {{/visible}}</figure>{{/storedWord}}</p>
-        <p>Guessed Letters: {{#storedGuess}}{{ . }}{{/storedGuess}}</p>
-        <p> Tries left: {{#triesLeft}}{{triesLeft}}{{/triesLeft}}</p>
+        <p class="guess">Guess the word {{#storedWord}}<figure>{{#visible}}{{letter}}{{/visible}}{{^visible}} _ {{/visible}}</figure>{{/storedWord}}</p>
+        <form method="post" action="/guess">
+          <input type = "text" name="guess" id="guess" placeholder="Guess a letter">
+          <input type = "submit" value="submit">
+        </form>
+        <p id="lett">Guessed Letters: {{#storedGuess}}{{ . }}{{/storedGuess}}</p>
+        <p id="tries"> Tries left: {{triesLeft}}</p>
     </main>
 
   </body>
