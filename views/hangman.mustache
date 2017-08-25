@@ -5,20 +5,22 @@
       <link rel="stylesheet" href="/css/styles.css">
     </head>
   <body>
-
     <section>
           <p> Welcome back, {{#users}}{{name}}{{/users}}</p>
-    <h3>The Mystery Word Game</title>
+          <h3>The Mystery Word Game</title>
+
     </section>
-    <main>
-        <p class="guess">Guess the word {{#storedWord}}<figure>{{#visible}}{{letter}}{{/visible}}{{^visible}} _ {{/visible}}</figure>{{/storedWord}}</p>
-        <form method="post" action="/guess">
-          <input type = "text" name="guess" id="guess" placeholder="Guess a letter">
-          <input type = "submit" value="submit">
-        </form>
-        <p id="lett">Guessed Letters: {{#storedGuess}}{{ . }}{{/storedGuess}}</p>
-        <p id="tries"> Tries left: {{triesLeft}}</p>
-    </main>
+        <main>
+            <p>{{^multiple}}{{Please, select only one letter.}}{{/multiple}}</p>
+            <p class="guess">Guess the word {{#storedWord}}<figure>{{#visible}}{{letter}}{{/visible}}{{^visible}} _ {{/visible}}</figure>{{/storedWord}}</p>
+                <form method="post" action="/guess">
+                  <input type = "text" name="guess" id="guess" maxlength = "1" placeholder="Guess a letter">
+                  <input type = "submit" value="submit">
+                </form>
+            <p id="letters">Guessed Letters: {{#storedGuess}}{{ . }}{{/storedGuess}}</p>
+        
+            <p id="tries"> Tries left: {{triesLeft}}</p>
+        </main>
 
   </body>
   </html>

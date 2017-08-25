@@ -29,9 +29,5 @@ main {
 }
 #letters {
   font-size: 1.25em;
-  text-align: left;
-  margin-left: 10%;
-}
-div {
-  visibility: hidden;
+  margin-left: 8%;
 }
